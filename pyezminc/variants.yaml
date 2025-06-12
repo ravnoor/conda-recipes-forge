@@ -1,4 +1,4 @@
-channel_sources: conda-forge/label/rust_dev,conda-forge,https://repo.prefix.dev/nrx-forge,minc-forge
+# channel_sources: conda-forge/label/rust_dev,conda-forge,https://repo.prefix.dev/nrx-forge,minc-forge
 
 minc_toolkit_v2:
   - "1.9.19=noblas_novisual_h1234567_2"

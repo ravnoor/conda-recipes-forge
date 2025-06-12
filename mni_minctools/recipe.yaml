@@ -32,16 +32,16 @@ requirements:
     - flex
     - bison
     - ${{ compiler('c') }}
-    - mni_libminc ${{ libminc_ver }}
+    - mni_libminc==${{ libminc_ver }}
     - jpeg
     - openjpeg==2.3
   host:
     - zlib
     - flex
     - bison
-    - mni_libminc ${{ libminc_ver }}
+    - mni_libminc==${{ libminc_ver }}
   run:
-    - mni_libminc ${{ libminc_ver }}
+    - mni_libminc==${{ libminc_ver }}
     - zlib
 
 tests:
