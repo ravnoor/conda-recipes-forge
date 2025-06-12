@@ -14,12 +14,22 @@ build:
 
 requirements:
   host:
-    - python >=3.8
+    - ${{ compiler('cxx') }}
+    - python
     - scikit-build-core >=0.4.3
     - nanobind >=1.3.2
     - pip
+    - if: linux
+      then:
+      - libpng-devel
+      - libpng
+  build:
+    - cmake
+    - ninja
+    - setuptools
+    - SimpleITK==2.4.1
   run:
-    - python >=3.8
+    - python
     - pandas
     - pyyaml
     - numpy <=2.0.1
@@ -33,7 +43,16 @@ tests:
   - python:
       imports:
         - antspyx
-      pip_check: true
+      pip_check: false
+  - script:
+      - bash tests/run_tests.sh
+    requirements:
+      run:
+        - ${{ PYTHON }}
+    # extra files to be copied to the test folder from the recipe or source directory
+    files:
+      source:
+        - tests/
 
 about:
   homepage: https://antspyx.readthedocs.io/
