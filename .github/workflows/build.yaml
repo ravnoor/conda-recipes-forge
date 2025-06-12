@@ -60,6 +60,7 @@ jobs:
             ${{ matrix.build-args }}  \
             --package-format conda:22 \
             --channel conda-forge \
+            --channel minc-forge \
             --channel https://repo.prefix.dev/nrx-forge
 
       - name: Upload package
