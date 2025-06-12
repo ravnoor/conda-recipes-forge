@@ -59,8 +59,8 @@ jobs:
         shell: bash
         run: |
           rattler-build build --recipe-dir . \
-            --skip-existing=all --target-platform=${{ matrix.target-platform }} \
-            ${{ matrix.build-args }} --experimental \
+            --skip-existing=all --experimental \
+            ${{ matrix.build-args }}  \
             --package-format conda:22 \
             --channel conda-forge \
             --channel https://repo.prefix.dev/nrx-forge
