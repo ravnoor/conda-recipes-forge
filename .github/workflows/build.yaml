@@ -41,11 +41,14 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Authenticate with private channel on repo.prefix.dev
+        run: |
+          echo '{"repo.prefix.dev": {"CondaToken": "${{ secrets.PREFIX_API_KEY }}"}}' > ${{ runner.temp }}/credentials.json
+          echo "RATTLER_AUTH_FILE=${{ runner.temp }}/credentials.json" >> $GITHUB_ENV
+
       - uses: prefix-dev/setup-pixi@v0.8.8
         with:
           pixi-version: v0.48.1
-          auth-host: repo.prefix.dev
-          auth-token: ${{ secrets.PREFIX_API_KEY }}
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
 
