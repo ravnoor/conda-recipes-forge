@@ -21,7 +21,6 @@ requirements:
     - pip
     - if: linux
       then:
-      - libpng-dev
       - libpng
   build:
     - cmake
