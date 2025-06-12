@@ -45,7 +45,7 @@ requirements:
     - gsl
     - fftw
     - jpeg
-    - openjpeg==2.3
+    - openjpeg
     - perl
     - expat
     - if: " minctoolkit_visual != 'novisual' "
