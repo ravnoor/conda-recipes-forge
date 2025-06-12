@@ -1,0 +1,71 @@
+schema_version: 1
+
+context:
+  name: pyezminc
+  version: 1.3.01
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  git: https://github.com/ravnoor/pyezminc.git
+  branch: master-python3
+  # path: /Users/ravnoor/Nextcloud/Experiments/pyezminc
+
+build:
+  # number: 3
+  script: ${{ PYTHON }} -m pip install .
+
+requirements:
+  host:
+    - numpy >=1.20
+    - pip < 25.3
+    - python
+    - cython
+    - minc-toolkit-v2
+  build:
+    - numpy >=1.20
+    - cython
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - setuptools
+    - minc-toolkit-v2
+  run:
+    - minc-toolkit-v2
+    - ${{ pin_compatible('numpy') }}
+    - ${{ pin_compatible('openssl') }}
+    - six
+    - python
+
+tests:
+  - python:
+      imports:
+        - minc
+      # by default we perform a `pip check` in the python test but
+      # it can be disabled by setting this to false
+      pip_check: false
+
+  - script:
+      - pytest ./test
+    requirements:
+      run:
+        - pytest
+        - ${{ PYTHON }} # require an older python version
+    # extra files to be copied to the test folder from the recipe or source directory
+    files:
+      source:
+        - test/
+
+about:
+  license: NGPL
+  summary: Python library for MINC IO, using cython and minc1 API
+  description: |
+    Python library for MINC IO, using cython and minc1 API
+  homepage: https://github.com/BIC-MNI/pyezminc
+  repository: https://github.com/BIC-MNI/pyezminc
+
+extra:
+  recipe-maintainers:
+    - vfonov
+    - rgill

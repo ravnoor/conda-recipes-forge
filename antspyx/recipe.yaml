@@ -1,0 +1,41 @@
+context:
+  version: 0.5.4
+
+package:
+  name: antspyx
+  version: ${{ version }}
+
+source:
+  - url: https://pypi.org/packages/source/a/antspyx/antspyx-${{ version }}.tar.gz
+    sha256: 893e5b45175e278c1e5ab2c4c663f4dbcb08098ee842ba35eca73d785f263749
+
+build:
+  script: ${{ PYTHON }} -m pip install .
+
+requirements:
+  host:
+    - python >=3.8
+    - scikit-build-core >=0.4.3
+    - nanobind >=1.3.2
+    - pip
+  run:
+    - python >=3.8
+    - pandas
+    - pyyaml
+    - numpy <=2.0.1
+    - statsmodels
+    - webcolors
+    - matplotlib
+    - pillow
+    - requests
+
+tests:
+  - python:
+      imports:
+        - antspyx
+      pip_check: true
+
+about:
+  homepage: https://antspyx.readthedocs.io/
+  summary: A fast medical imaging analysis library in Python with algorithms for registration, segmentation, and more.
+  license: Apache-2.0

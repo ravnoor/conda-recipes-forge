@@ -1,0 +1,62 @@
+#  run_exports:
+#    - {{ pin_compatible('hdf5', upper_bound='x.x.x') }}
+#    - {{ pin_compatible('libnetcdf', upper_bound='x.x') }}
+#    - {{ pin_compatible('fftw', upper_bound='x.x') }}
+#    - openjpeg
+#    - zlib
+#    - {{ pin_compatible('gsl', upper_bound='x.x') }}
+#    - jpeg
+#    - expat
+#    - {{ pin_compatible('openblas', upper_bound='x.x') }}            # [minctoolkit_variant == 'openblas']
+schema_version: 1
+
+package:
+  name: mni_minctools
+  version: 2.4.06
+
+source:
+  - git: https://github.com/BIC-MNI/minc-tools.git
+    rev: develop
+    target_directory: minctools
+  - url: http://downloads.sourceforge.net/project/niftilib/nifticlib/nifticlib_2_0_0/nifticlib-2.0.0.tar.gz
+    sha256: a3e988e6a32ec57833056f6b09f940c69e79829028da121ff2c5c6f7f94a7f88
+    target_directory: nifticlib
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - cmake
+    - make
+    - flex
+    - bison
+    - ${{ compiler('c') }}
+    - mni_libminc ${{ libminc_ver }}
+    - jpeg
+    - openjpeg==2.3
+  host:
+    - zlib
+    - flex
+    - bison
+    - mni_libminc ${{ libminc_ver }}
+  run:
+    - mni_libminc ${{ libminc_ver }}
+    - zlib
+
+tests:
+  - script:
+      - minccalc -version
+      - mincresample -version
+      - dcm2mnc -version
+      - mnc2nii -version
+      - nii2mnc -version
+
+about:
+  license: NGPL
+  summary: tools for working with MINC files
+  description: |
+    tools for working with MINC files
+  homepage: http://bic-mni.github.io/
+  repository: https://github.com/BIC-MNI/minc-tools
+  documentation: http://bic-mni.github.io/man-pages
