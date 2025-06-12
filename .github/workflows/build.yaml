@@ -58,8 +58,8 @@ jobs:
       - name: Build individual packages
         shell: bash
         run: |
-          pixi run rattler-build build --recipe-dir . \
-            --skip-existing=all --target-platform=${{ matrix.target }} \
+          rattler-build build --recipe-dir . \
+            --skip-existing=all --target-platform=${{ matrix.target-platform }} \
             ${{ matrix.build-args }} --experimental \
             --package-format conda:22 \
             --channel conda-forge \
@@ -72,5 +72,5 @@ jobs:
         run: |
           for pkg in in output/**/*.conda; do
             echo "Uploading ${pkg}"
-            pixi run rattler-build upload prefix -c nrx-forge "${pkg}"
+            rattler-build upload prefix -c nrx-forge "${pkg}"
           done
