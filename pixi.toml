@@ -1,0 +1,22 @@
+[workspace]
+authors = ["Ravnoor Gill <ravnoor@gmail.com>"]
+channels = ["conda-forge"]
+name = "conda-recipes-forge"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+rattler-build = ">=0.43.1,<0.44"
+
+[feature.update-versions.dependencies]
+python = ">=3.13.3,<3.14"
+requests = ">=2.32.4,<3"
+pyyaml = ">=6.0.2,<7"
+
+[feature.update-versions.tasks]
+update-versions = "python .scripts/update-versions.py"
+
+[environments]
+update-versions = ["update-versions"]
