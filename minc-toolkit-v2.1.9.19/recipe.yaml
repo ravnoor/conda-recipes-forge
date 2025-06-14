@@ -38,7 +38,7 @@ requirements:
     - gsl
     - fftw
     - libjpeg-turbo
-    - openjpeg<=2.3
+    - openjpeg==2.3
     - perl==5.32
     - expat
     - if: " linux and minctoolkit_visual != 'novisual' "
