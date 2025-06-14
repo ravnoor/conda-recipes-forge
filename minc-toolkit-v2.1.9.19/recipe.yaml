@@ -17,8 +17,8 @@ source:
   # path: /home/vfonov/src/minc-toolkit-v2
 
 build:
-  number: 4
-  string: ${{ minctoolkit_variant }}_${{ minctoolkit_visual }}_h${{ PKG_HASH }}_${{ PKG_BUILDNUM }}
+  # number: 5
+  string: ${{ minctoolkit_variant }}_${{ minctoolkit_visual }}_h${{ hash }}_${{ build_number }}
 
 requirements:
   build:
@@ -31,9 +31,15 @@ requirements:
     - ${{ compiler('fortran') }}
     - if: "minctoolkit_variant == 'openblas'"
       then: openblas
-    - hdf5==${{hdf5}}
+    - if: linux
+      then:
+        - hdf5==1.10.6 nompi_h6a2412b_1114
+        - libnetcdf==4.8.1 nompi_hcd642e3_100
+    - if: osx
+      then:
+        - hdf5==1.10.6
+        - libnetcdf==4.8.1
     - pcre
-    - libnetcdf==${{libnetcdf}}
     - zlib
     - gsl
     - fftw
@@ -41,88 +47,63 @@ requirements:
     - openjpeg==2.3
     - perl==5.32
     - expat
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('mesa-libgl-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('mesa-dri-drivers') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libx11') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libx11
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxrandr
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxinerama
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxcursor
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxi
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxau
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxext
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxfixes
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: libglu
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: libxcb
     - if: linux
       then: ${{ cdt('libselinux') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxdamage') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxdamage-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxext') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxext-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxcursor') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxcursor-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxrandr') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxrandr-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxi') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxi-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxinerama') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxinerama-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxxf86vm') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: ${{ cdt('libxxf86vm-devel') }}
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: freeglut
+    - if: "linux and minctoolkit_visual != 'novisual'"
+      then:
+      - ${{ cdt('mesa-libgl-devel') }}
+      - ${{ cdt('mesa-dri-drivers') }}
+      - ${{ cdt('libx11') }}
+      - xorg-libx11
+      - xorg-libxrandr
+      - xorg-libxinerama
+      - xorg-libxcursor
+      - xorg-libxi
+      - xorg-libxau
+      - xorg-libxext
+      - xorg-libxfixes
+      - libglu
+      - libxcb
+      - ${{ cdt('libxdamage') }}
+      - ${{ cdt('libxdamage-devel') }}
+      - ${{ cdt('libxext') }}
+      - ${{ cdt('libxext-devel') }}
+      - ${{ cdt('libxcursor') }}
+      - ${{ cdt('libxcursor-devel') }}
+      - ${{ cdt('libxrandr') }}
+      - ${{ cdt('libxrandr-devel') }}
+      - ${{ cdt('libxi') }}
+      - ${{ cdt('libxi-devel') }}
+      - ${{ cdt('libxinerama') }}
+      - ${{ cdt('libxinerama-devel') }}
+      - ${{ cdt('libxxf86vm') }}
+      - ${{ cdt('libxxf86vm-devel') }}
+      - freeglut
   host:
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxfixes
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libx11
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: libglu
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: libxcb
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxau
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxext
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: xorg-libxi
+    - if: "linux and minctoolkit_visual != 'novisual'"
+      then:
+      - freeglut
+      - xorg-libxfixes
+      - xorg-libx11
+      - libglu
+      - libxcb
+      - xorg-libxau
+      - xorg-libxext
+      - xorg-libxi
     - perl==5.32
     - zlib
     - expat
-    - if: " linux and minctoolkit_visual != 'novisual' "
-      then: freeglut
+
   run:
     - perl==5.32
-    - hdf5==${{hdf5}}
-    - libnetcdf==${{libnetcdf}}
+    - if: linux
+      then:
+        - hdf5==1.10.6 nompi_h6a2412b_1114
+        - libnetcdf==4.8.1 nompi_hcd642e3_100
+    - if: osx
+      then:
+        - hdf5==1.10.6
+        - libnetcdf==4.8.1
     - zlib
     - gsl
     - fftw
