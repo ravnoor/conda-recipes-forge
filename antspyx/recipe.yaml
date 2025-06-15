@@ -1,6 +1,10 @@
 context:
   version: 0.5.4
 
+build:
+  skip:
+    - linux-64
+
 package:
   name: antspyx
   version: ${{ version }}
