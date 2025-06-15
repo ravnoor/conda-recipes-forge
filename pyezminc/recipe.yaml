@@ -15,7 +15,11 @@ source:
 
 build:
   # number: 3
-  script: ${{ PYTHON }} -m pip install .
+  script:
+    content: |
+      ${{ PYTHON }} -m pip install .
+  skip:
+    - linux-64
 
 requirements:
   host:

@@ -1,10 +1,6 @@
 context:
   version: 0.5.4
 
-build:
-  skip:
-    - linux-64
-
 package:
   name: antspyx
   version: ${{ version }}
@@ -15,6 +11,8 @@ source:
 
 build:
   script: ${{ PYTHON }} -m pip install .
+  skip:
+    - linux-64
 
 requirements:
   host:

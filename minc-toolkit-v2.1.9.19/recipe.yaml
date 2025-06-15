@@ -1,9 +1,5 @@
 schema_version: 1
 
-build:
-  skip:
-    - linux-64
-
 package:
   name: minc-toolkit-v2
   version: 1.9.19.1
@@ -23,6 +19,8 @@ source:
 build:
   # number: 5
   string: ${{ minctoolkit_variant }}_${{ minctoolkit_visual }}_h${{ hash }}_${{ build_number }}
+  skip:
+    - linux-64
 
 requirements:
   build:
