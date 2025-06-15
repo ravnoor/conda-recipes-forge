@@ -56,8 +56,6 @@ jobs:
         shell: bash
         run: |
           rattler-build build --recipe-dir . \
-            # --skip-existing=all \
-            --experimental \
             ${{ matrix.build-args }}  \
             --package-format conda:22 \
             --channel conda-forge \
