@@ -26,6 +26,8 @@ build:
       - hdf5
       - libnetcdf
       - c_compiler_version
+  skip:
+    - linux-64
 
 requirements:
   build:
