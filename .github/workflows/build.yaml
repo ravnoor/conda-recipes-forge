@@ -64,8 +64,7 @@ jobs:
             --channel conda-forge \
             --channel minc-forge \
             --channel https://repo.prefix.dev/nrx-forge \
-            --log-level info \
-            --solver-timeout 1800
+            --debug
 
       - name: Upload package
         shell: bash
