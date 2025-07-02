@@ -1,4 +1,4 @@
-channel_sources: https://repo.prefix.dev/nrx-forge/,conda-forge,minc-forge
+# channel_sources: https://repo.prefix.dev/nrx-forge/,conda-forge,minc-forge
 
 python:
 # note that versions are _strings_ (not numbers)
