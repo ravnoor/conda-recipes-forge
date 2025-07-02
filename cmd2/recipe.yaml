@@ -10,7 +10,8 @@ source:
   sha256: d06301cc578a83531261121c0b11d79d29d0a80aca01ed6752c20c4cfcda2dd9
 
 build:
-  script: ${{ PYTHON }} -m pip install .
+  script: ${{ PYTHON }} -m pip install --use-pep517 --no-build-isolation . -vv
+  number: 0
 
 requirements:
   host:
