@@ -10,14 +10,14 @@ source:
   tag: v${{ version }}
 
 build:
+  skip:
+    - osx-arm64
+    - osx-64  # add this to skip all macOS builds
   script: ${{ PYTHON }} -m pip install --use-pep517 --no-build-isolation . -vv
   number: 0
   python:
     entry_points:
-    - nii2dcm = nii2dcm.__main__:cli
-  skip:
-    - osx-arm64
-  # noarch: python
+      - nii2dcm = nii2dcm.__main__:cli
 
 requirements:
   host:
