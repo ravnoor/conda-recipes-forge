@@ -70,5 +70,5 @@ jobs:
         run: |
           for pkg in output/**/*.conda; do
             echo "Uploading ${pkg}"
-            rattler-build upload prefix -c nrx-forge "${pkg}"
+            rattler-build upload prefix -c nrx-forge "${pkg}" --skip-existing
           done
