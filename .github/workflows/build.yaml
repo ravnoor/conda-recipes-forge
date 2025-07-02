@@ -54,14 +54,18 @@ jobs:
 
       - name: Build individual packages
         shell: bash
-        run: |
+        timeout-minutes: 45
+        run: |         
+          # Add solver options to prevent hanging
           rattler-build build --continue-on-failure \
             --recipe-dir .  \
             ${{ matrix.build-args }}  \
             --package-format conda:22 \
             --channel conda-forge \
             --channel minc-forge \
-            --channel https://repo.prefix.dev/nrx-forge
+            --channel https://repo.prefix.dev/nrx-forge \
+            --log-level info \
+            --solver-timeout 1800
 
       - name: Upload package
         shell: bash
