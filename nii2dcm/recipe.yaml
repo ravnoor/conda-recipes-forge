@@ -10,7 +10,8 @@ source:
   tag: v${{ version }}
 
 build:
-  script: ${{ PYTHON }} -m pip install . --no-build-isolation --use-pep517
+  script: ${{ PYTHON }} -m pip install --use-pep517 --no-build-isolation . -vv
+  number: 0
   python:
     entry_points:
     - nii2dcm = nii2dcm.__main__:cli
@@ -29,12 +30,14 @@ requirements:
   - matplotlib==3.6.2
   - nibabel==5.0.0
   - pydicom==2.3.0
+  - dunamai==1.18.0
+  - twine==4.0.2
 
 tests:
 - python:
     imports:
     - nii2dcm
-    pip_check: false
+    pip_check: true
 
 about:
   summary: A package to convert NIfTI images to DICOM format using a reference DICOM series.
