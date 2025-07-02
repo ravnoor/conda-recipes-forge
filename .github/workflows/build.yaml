@@ -68,7 +68,7 @@ jobs:
         # do not upload on PR
         if: github.event_name == 'push'
         run: |
-          for pkg in in output/**/*.conda; do
+          for pkg in output/**/*.conda; do
             echo "Uploading ${pkg}"
             rattler-build upload prefix -c nrx-forge "${pkg}"
           done
