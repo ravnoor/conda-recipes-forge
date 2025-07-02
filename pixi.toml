@@ -1,6 +1,6 @@
 [workspace]
 authors = ["Ravnoor Gill <ravnoor@gmail.com>"]
-channels = ["conda-forge"]
+channels = ["https://repo.prefix.dev/nrx-forge", "conda-forge"]
 name = "conda-recipes-forge"
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 version = "0.1.0"
