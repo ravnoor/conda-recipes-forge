@@ -8,7 +8,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-rattler-build = ">=0.43.1,<0.44"
+rattler-build = ">=0.44.0,<0.45"
 
 [feature.update-versions.dependencies]
 python = ">=3.13.3,<3.14"
