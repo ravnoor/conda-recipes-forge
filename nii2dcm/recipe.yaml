@@ -15,8 +15,6 @@ build:
   python:
     entry_points:
     - nii2dcm = nii2dcm.__main__:cli
-  skip:
-    - macos-arm64
   # noarch: python
 
 requirements:
