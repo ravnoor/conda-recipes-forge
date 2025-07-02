@@ -1,0 +1,7 @@
+*/output/
+output/
+*/cache/
+
+# pixi environments
+.pixi
+*.egg-info

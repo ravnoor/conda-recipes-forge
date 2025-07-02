@@ -1,0 +1,173 @@
+#  run_exports:
+#    - {{ pin_compatible('hdf5', upper_bound='x.x.x') }}
+#    - {{ pin_compatible('libnetcdf', upper_bound='x.x') }}
+#    - {{ pin_compatible('fftw', upper_bound='x.x') }}
+#    - openjpeg
+#    - zlib
+#    - {{ pin_compatible('gsl', upper_bound='x.x') }}
+#    - jpeg
+#    - expat
+#    - {{ pin_compatible('openblas', upper_bound='x.x') }}            # [minctoolkit_variant == 'openblas']
+schema_version: 1
+
+package:
+  name: minc-toolkit-v2
+  version: 1.9.18.4
+
+source:
+  git: https://github.com/BIC-MNI/minc-toolkit-v2.git
+  branch: develop-1.9.18
+
+build:
+  number: 3
+  string: ${{ minctoolkit_variant }}_${{ minctoolkit_visual }}_h${{ PKG_HASH }}_${{ PKG_BUILDNUM }}
+  variant:
+    use_keys:
+      - hdf5
+      - libnetcdf
+      - c_compiler_version
+  skip:
+    - linux-64
+
+requirements:
+  build:
+    - cmake
+    - make
+    - flex
+    - bison
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('fortran') }}
+    - if: "minctoolkit_variant == 'openblas'"
+      then: openblas
+    - hdf5==${{hdf5}}
+    - pcre
+    - libnetcdf==${{libnetcdf}}
+    - zlib
+    - gsl
+    - fftw
+    - jpeg
+    - openjpeg
+    - perl
+    - expat
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('mesa-libgl-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('mesa-dri-drivers') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libx11') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libx11
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxrandr
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxinerama
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxcursor
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxi
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxau
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxext
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxfixes
+    - if: " minctoolkit_visual != 'novisual' "
+      then: libglu
+    - if: " minctoolkit_visual != 'novisual' "
+      then: libxcb
+    - if: linux
+      then: ${{ cdt('libselinux') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxdamage') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxdamage-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxext') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxext-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxcursor') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxcursor-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxrandr') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxrandr-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxi') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxi-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxinerama') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxinerama-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxxf86vm') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: ${{ cdt('libxxf86vm-devel') }}
+    - if: " minctoolkit_visual != 'novisual' "
+      then: freeglut
+  host:
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxfixes
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libx11
+    - if: " minctoolkit_visual != 'novisual' "
+      then: libglu
+    - if: " minctoolkit_visual != 'novisual' "
+      then: libxcb
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxau
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxext
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxi
+    - perl
+    - zlib
+    - expat
+    - if: " minctoolkit_visual != 'novisual' "
+      then: freeglut
+  run:
+    - perl
+    - hdf5==${{hdf5}}
+    - libnetcdf
+    - zlib
+    - ${{ pin_compatible('gsl', upper_bound='x.x') }}
+    - jpeg
+    - ${{ pin_compatible('fftw', upper_bound='x.x') }}
+    - if: "minctoolkit_variant == 'openblas'"
+      then: ${{ pin_compatible('openblas', upper_bound='x.x') }}
+    - jpeg
+    - openjpeg
+    - expat
+    - pcre
+    - if: " minctoolkit_visual != 'novisual' "
+      then: libxcb
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libx11
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxau
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxext
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxfixes
+    - if: " minctoolkit_visual != 'novisual' "
+      then: xorg-libxi
+    - if: " minctoolkit_visual != 'novisual' "
+      then: freeglut
+
+tests:
+  - script:
+      - minccalc -version
+      - if: "minctoolkit_variant != 'lite'"
+        then: antsRegistration --version
+
+about:
+  license: NGPL
+  summary: Toolkit for processing MRI scans (external libraries)
+  description: |
+    This metaproject bundles multiple MINC-based packages that historically have been developed somewhat independently.
+  homepage: http://bic-mni.github.io/
+  repository: https://github.com/BIC-MNI/minc-toolkit-v2
+  documentation: http://bic-mni.github.io/man-pages

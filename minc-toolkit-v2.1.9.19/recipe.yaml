@@ -1,0 +1,155 @@
+schema_version: 1
+
+package:
+  name: minc-toolkit-v2
+  version: 1.9.19.1
+
+source:
+  #url: https://github.com/BIC-MNI/minc-toolkit-v2/releases/download/release-1.9.18.1/minc-toolkit-v2-1.9.18.1.tar.xz
+  #url: https://github.com/BIC-MNI/minc-toolkit-v2/archive/refs/heads/develop-1.9.18-WIP.tar.gz\
+  #url:  file:///home/vfonov/src/minc-toolkit-v2-1.9.18.2.tar.gz
+  #sha256: c299f6681259626cc5d36051723f2d4411cae8808ac40ef8879a23091e802e65
+  # sha256: eda5424f1046dcf39e87b75e8d207edf381318af30228a655ec1c704f4fc8699
+  git: https://github.com/BIC-MNI/minc-toolkit-v2.git
+  branch: develop-1.9.19-ITKv5.4
+  # branch: develop-1.9.19
+  #git_rev: develop-1.9.18
+  # path: /home/vfonov/src/minc-toolkit-v2
+
+build:
+  # number: 5
+  string: ${{ minctoolkit_variant }}_${{ minctoolkit_visual }}_h${{ hash }}_${{ build_number }}
+  skip:
+    - linux-64
+
+requirements:
+  build:
+    - cmake
+    - make
+    - flex
+    - bison
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('fortran') }}
+    - if: "minctoolkit_variant == 'openblas'"
+      then: openblas
+    - if: linux
+      then:
+        - hdf5==1.10.6 nompi_h6a2412b_1114
+        - libnetcdf==4.8.1 nompi_hcd642e3_100
+    - if: osx
+      then:
+        - hdf5==1.10.6
+        - libnetcdf==4.8.1
+    - pcre
+    - zlib
+    - gsl
+    - fftw
+    - libjpeg-turbo
+    - openjpeg==2.3
+    - perl==5.32
+    - expat
+    - if: linux
+      then: ${{ cdt('libselinux') }}
+    - if: "linux and minctoolkit_visual != 'novisual'"
+      then:
+      - ${{ cdt('mesa-libgl-devel') }}
+      - ${{ cdt('mesa-dri-drivers') }}
+      - ${{ cdt('libx11') }}
+      - xorg-libx11
+      - xorg-libxrandr
+      - xorg-libxinerama
+      - xorg-libxcursor
+      - xorg-libxi
+      - xorg-libxau
+      - xorg-libxext
+      - xorg-libxfixes
+      - libglu
+      - libxcb
+      - ${{ cdt('libxdamage') }}
+      - ${{ cdt('libxdamage-devel') }}
+      - ${{ cdt('libxext') }}
+      - ${{ cdt('libxext-devel') }}
+      - ${{ cdt('libxcursor') }}
+      - ${{ cdt('libxcursor-devel') }}
+      - ${{ cdt('libxrandr') }}
+      - ${{ cdt('libxrandr-devel') }}
+      - ${{ cdt('libxi') }}
+      - ${{ cdt('libxi-devel') }}
+      - ${{ cdt('libxinerama') }}
+      - ${{ cdt('libxinerama-devel') }}
+      - ${{ cdt('libxxf86vm') }}
+      - ${{ cdt('libxxf86vm-devel') }}
+      - freeglut
+  host:
+    - if: "linux and minctoolkit_visual != 'novisual'"
+      then:
+      - freeglut
+      - xorg-libxfixes
+      - xorg-libx11
+      - libglu
+      - libxcb
+      - xorg-libxau
+      - xorg-libxext
+      - xorg-libxi
+    - perl==5.32
+    - zlib
+    - expat
+
+  run:
+    - perl==5.32
+    - if: linux
+      then:
+        - hdf5==1.10.6 nompi_h6a2412b_1114
+        - libnetcdf==4.8.1 nompi_hcd642e3_100
+    - if: osx
+      then:
+        - hdf5==1.10.6
+        - libnetcdf==4.8.1
+    - zlib
+    - gsl
+    - fftw
+    - libjpeg-turbo
+    - openjpeg
+    - expat
+    - pcre
+    - if: " linux and minctoolkit_visual != 'novisual' "
+      then: libxcb
+    - if: " linux and minctoolkit_visual != 'novisual' "
+      then: xorg-libx11
+    - if: " linux and minctoolkit_visual != 'novisual' "
+      then: xorg-libxau
+    - if: " linux and minctoolkit_visual != 'novisual' "
+      then: xorg-libxext
+    - if: " linux and minctoolkit_visual != 'novisual' "
+      then: xorg-libxfixes
+    - if: " linux and minctoolkit_visual != 'novisual' "
+      then: xorg-libxi
+    - if: " linux and minctoolkit_visual != 'novisual' "
+      then: freeglut
+  run_exports:
+    - ${{ pin_compatible('hdf5', upper_bound='x.x.x') }}
+    - ${{ pin_compatible('libnetcdf', upper_bound='x.x') }}
+    - ${{ pin_compatible('fftw', upper_bound='x.x') }}
+    - openjpeg
+    - zlib
+    - ${{ pin_compatible('gsl', upper_bound='x.x') }}
+    - jpeg
+    - expat
+    - if: "minctoolkit_variant == 'openblas'"
+      then: ${{ pin_compatible('openblas', upper_bound='x.x') }}
+
+tests:
+  - script:
+      - minccalc -version
+      - if: "minctoolkit_variant != 'lite'"
+        then: antsRegistration --version
+
+about:
+  license: NGPL
+  summary: Toolkit for processing MRI scans (external libraries)
+  description: |
+    This metaproject bundles multiple MINC-based packages that historically have been developed somewhat independently.
+  homepage: http://bic-mni.github.io/
+  repository: https://github.com/BIC-MNI/minc-toolkit-v2
+  documentation: http://bic-mni.github.io/man-pages

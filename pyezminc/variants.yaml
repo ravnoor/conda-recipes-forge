@@ -1,0 +1,19 @@
+# channel_sources: conda-forge/label/rust_dev,conda-forge,https://repo.prefix.dev/nrx-forge,minc-forge
+
+minc_toolkit_v2:
+  - "1.9.19=noblas_novisual_h1234567_2"
+  # - "1.9.18.5=noblas_novisual_h1234567_2"
+  # - "1.9.18.4=noblas_novisual_h1234567_2"
+  # - "1.9.18.4=noblas_full_h1234567_2"
+
+# entries per package version that users are interested in
+python:
+# note that versions are _strings_ (not numbers)
+# - "3.8"
+- "3.9"
+- "3.10"
+- "3.11"
+# - "3.12"
+# - "3.13"
+
+

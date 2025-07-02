@@ -1,0 +1,43 @@
+context:
+  version: 0.6.3
+
+package:
+  name: tslearn
+  version: ${{ version }}
+
+source:
+  - url: https://pypi.org/packages/source/t/tslearn/tslearn-${{ version }}.tar.gz
+    sha256: c855c0b784b42dc4c50f4eaf524ec7ed658037e86fc14af38ca3b66c75dd6adb
+
+build:
+  script: ${{ PYTHON }} -m pip install .
+  noarch: python
+
+requirements:
+  host:
+    - python
+    - setuptools
+    - wheel
+    - numpy<2.3.0
+    - pip
+  run:
+    - python
+    - numpy<2.3.0
+    - scipy
+    - scikit-learn
+    - numba
+    - joblib>=0.12
+  # - torch  # extra == 'pytorch'
+  # - pytest  # extra == 'tests'
+  # - torch  # extra == 'tests'
+
+tests:
+  - python:
+      imports:
+        - tslearn
+      pip_check: true
+
+about:
+  homepage: http://tslearn.readthedocs.io/
+  summary: A machine learning toolkit dedicated to time-series data
+  license: BSD-2-Clause

@@ -1,0 +1,9 @@
+# channel_sources: https://repo.prefix.dev/nrx-forge/,conda-forge,minc-forge
+
+python:
+# note that versions are _strings_ (not numbers)
+# - "3.8"
+- "3.9"
+- "3.10"
+- "3.11"
+- "3.12"
