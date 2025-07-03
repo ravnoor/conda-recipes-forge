@@ -1,7 +1,8 @@
+# ignore build artifacts
 */output/
 output/
 */cache/
+*.egg-info
 
 # pixi environments
-.pixi
-*.egg-info
+!.pixi/config.toml
