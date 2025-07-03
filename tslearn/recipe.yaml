@@ -10,7 +10,7 @@ source:
     sha256: 9efcd8afe3ef55186f57f4c3ccb45ae353d6f85f7aea2e420032c34a99345705
 
 build:
-  script: ${{ PYTHON }} -m pip install .
+  script: ${{ PYTHON }} -m pip install --use-pep517 --no-build-isolation . -vv
   noarch: python
 
 requirements:
