@@ -1,0 +1,93 @@
+context:
+  version: 0.1.0
+
+package:
+  name: evaluate-segmentation
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Visceral-Project/EvaluateSegmentation.git
+    branch: master
+
+build:
+  string: static_h${{ hash }}_${{ build_number }}
+  script: |
+    mkdir -p build
+    cd build
+    
+    # Find the ITK installation directory
+    if [ -d "${PREFIX}/lib/cmake/ITK" ]; then
+      export ITK_DIR=${PREFIX}/lib/cmake/ITK
+    elif [ -d "${PREFIX}/lib/cmake/ITK-5.3" ]; then
+      export ITK_DIR=${PREFIX}/lib/cmake/ITK-5.3
+    else
+      # Try to find any ITK directory
+      export ITK_DIR=$(find ${PREFIX}/lib/cmake -name "ITK*" -type d | head -1)
+      echo "Found ITK at: $ITK_DIR"
+    fi
+    
+    # Set up for static linking of C++ standard library
+    export CXXFLAGS="${CXXFLAGS} -static-libgcc -static-libstdc++"
+    export LDFLAGS="${LDFLAGS} -static-libgcc -static-libstdc++"
+    
+    # Configure with static linking options
+    cmake ${CMAKE_ARGS} \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+      -DCMAKE_PREFIX_PATH=${PREFIX} \
+      -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++" \
+      -DBUILD_SHARED_LIBS=OFF \
+      -DITK_DIR=${ITK_DIR} \
+      ${SRC_DIR}/source
+    
+    make -j$CPU_COUNT
+    
+    # Create a bin directory and copy the executable
+    mkdir -p ${PREFIX}/bin
+    cp EvaluateSegmentation ${PREFIX}/bin/
+    
+    # Use patchelf to reduce shared library dependencies as much as possible
+    # This won't make it fully static but will reduce dependencies
+    patchelf --set-rpath '$ORIGIN/../lib:$ORIGIN' ${PREFIX}/bin/EvaluateSegmentation
+    
+    # Check the binary's dependencies
+    echo "Checking binary dependencies..."
+    file ${PREFIX}/bin/EvaluateSegmentation
+    if command -v ldd &> /dev/null; then
+      ldd ${PREFIX}/bin/EvaluateSegmentation
+    fi
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+    - cmake >=3.5
+    - make
+    - pkg-config
+    - binutils  # For ldd to check the static linking
+    - patchelf  # For patching ELF binaries
+  host:
+    - itk
+    - libitk-devel
+
+tests:
+  - script:
+      - EvaluateSegmentation --help || [[ $? -eq 1 ]]  # The tool might return exit code 1 when showing help
+    requirements:
+      run:
+        - itk  # We still need ITK at runtime since we're not fully static
+
+about:
+  homepage: https://github.com/Visceral-Project/EvaluateSegmentation
+  summary: EvaluateSegmentation is a tool that compares two volumes (a test segmentation and a ground truth segmentation) using 22 different metrics.
+  description: |
+    EvaluateSegmentation is a tool that compares two volumes (a test segmentation and a
+    ground truth segmentation) using 22 different metrics that were selected as a result of
+    comprehensive research into the metrics used in the medical volume segmentations.
+    
+    The article "Metrics for evaluating 3D medical image segmentation: analysis, selection, and tool"
+    in the journal BMC Medical Imaging provides definitions and a comprehensive analysis of these metrics
+    as well as guidelines for metric selection based on the properties of the segmentations being evaluated
+    and the segmentation goal.
+  license: Apache-2.0
+  license_file: LICENSE
