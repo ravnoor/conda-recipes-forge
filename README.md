@@ -1,116 +1,79 @@
 # conda-recipes-forge
 
-A collection of conda recipes for MINC (Medical Image NetCDF) toolkit and related scientific computing packages.
+> **Note**
+> This repository provides modern, reproducible conda and rattler-build recipes for scientific computing and medical imaging, with a focus on the MINC ecosystem and related tools.
 
 ## Overview
 
-This repository contains conda package recipes for building and distributing scientific computing tools, with a focus on medical imaging and the MINC ecosystem. The recipes are designed to work with both traditional conda-build and the modern rattler-build system.
+**conda-recipes-forge** is a curated collection of build recipes for open-source scientific and medical imaging software. It supports both [rattler-build](https://prefix-dev.github.io/rattler-build/) and traditional conda-build workflows, enabling cross-platform, automated builds and CI/CD.
 
-## Packages
+---
 
-### MINC Ecosystem
+## Recipes Included
 
-- **[minc-toolkit-v2](minc-toolkit-v2.1.9.18/)** - Complete toolkit for processing MRI scans
-  - Versions: 1.9.18.4, 1.9.19.1
-  - Variants: `noblas`, `legacy`, `openblas`
-  - Visual options: `novisual`, `full`
+### MINC & Medical Imaging
+- **minc-toolkit-v2.1.9.18/**, **minc-toolkit-v2.1.9.19/**  
+  Complete MRI processing toolkit (multiple versions/variants)
+- **mni_minctools/**  
+  Core MINC file utilities and converters
+- **pyezminc/**  
+  Python bindings for MINC I/O (Cython-based)
+- **antspyx/**  
+  ANTs (Advanced Normalization Tools) Python bindings
 
-- **[mni_minctools](mni_minctools/)** - Core tools for working with MINC files
-  - Version: 2.4.06
-  - Essential MINC utilities and converters
+### Scientific & Data Tools
+- **tslearn/**  
+  Time series machine learning toolkit
+- **bws/**  
+  Bitwarden Secrets Manager CLI (Rust)
+- **yazi/**  
+  Blazing fast terminal file manager (Rust)
+- **simdjson/**  
+  SIMD-accelerated C++ JSON parser
 
-- **[pyezminc](pyezminc/)** - Python library for MINC I/O
-  - Version: 1.3.01
-  - Python bindings using Cython and MINC1 API
+---
 
-### Scientific Computing
+## Quickstart
 
-- **[antspyx](antspyx/)** - ANTs (Advanced Normalization Tools) Python bindings
-  - Version: 0.5.4
-  - Medical imaging registration and segmentation
-
-- **[tslearn](tslearn/)** - Time series machine learning toolkit
-  - Version: 0.6.3
-  - Specialized algorithms for time series analysis
-
-## Build System
-
-### Requirements
-
-- [rattler-build](https://prefix-dev.github.io/rattler-build/) (recommended)
-- Or traditional conda-build
-
-### Building Packages
-
-#### Using rattler-build (Recommended)
-
-```bash
-# Build all packages
+```sh
+# Build all packages (recommended)
 rattler-build build --recipe-dir . \
   --channel conda-forge \
   --channel https://repo.prefix.dev/nrx-forge
 
-# Build specific package
-rattler-build build --recipe-dir pyezminc \
+# Build a specific package
+drattler-build build --recipe-dir antspyx \
   --channel conda-forge \
   --channel https://repo.prefix.dev/nrx-forge
 ```
 
-## Recipe Structure
+- Each recipe defines its own tests (see `tests:` in each `recipe.yaml`).
+- Output artifacts are placed in each package's `output/` directory.
 
-### Modern Recipes (rattler-build)
-- `recipe.yaml` - Main recipe definition
-- `variants.yaml` - Build variants and configurations
-- `build.sh` - Build script (if needed)
+---
 
+## Project Structure & Conventions
 
-## CI/CD
+- Each package has its own directory (see above).
+- Modern recipes use `recipe.yaml` (main), `variants.yaml` (build variants), and optional `build.sh` (custom steps).
+- Rust-based recipes (e.g., `bws`, `yazi`) use bundled C libraries if system libraries are missing/incompatible.
+- Channels are prioritized: `conda-forge/label/rust_dev`, `conda-forge`, `https://repo.prefix.dev/nrx-forge`, `minc-forge`.
+- See `.github/copilot-instructions.md` for AI agent guidelines and advanced conventions.
 
-The repository includes GitHub Actions workflows for automated building and publishing:
+---
 
-- **Triggers**: Push to main, pull requests, manual dispatch
-- **Platforms**: Linux (x64, ARM64), macOS (ARM64)
-- **Publishing**: Packages are uploaded to `nrx-forge` channel on repo.prefix.dev
+## CI/CD & Automation
 
-### Workflow Features
-- Multi-platform builds
-- Skip existing packages
-- Automatic upload on push to main
-- Integration with private conda channels
+- GitHub Actions (`.github/workflows/build.yaml`) builds all packages on Linux (x64, ARM64) and macOS (ARM64).
+- Packages are uploaded to the `nrx-forge` channel on push to `main`.
+- Multi-platform, skip-existing, and private channel integration supported.
 
+> [!TIP]
+> For more details, see the root `README.md` and each package's directory for specific patterns and exceptions.
 
+---
 
-### Recipe Guidelines
-
-- Use `recipe.yaml` format for new packages
-- Include comprehensive tests
-- Follow conda-forge standards
-- Document any special build requirements
-- Use semantic versioning
-
-## Channels
-
-The recipes are configured to use these channels in order:
-1. `conda-forge/label/rust_dev`
-2. `conda-forge`
-3. `https://repo.prefix.dev/nrx-forge`
-4. `minc-forge`
-
-## License
-
-Individual packages maintain their respective licenses:
-- MINC tools: NGPL (Non-commercial GPL)
-- ANTsPyx: Apache-2.0
-- TSLearn: BSD-2-Clause
-
-## Support
-
-For issues related to:
-- **Package builds**: Open an issue in this repository
-- **MINC toolkit**: Visit [BIC-MNI GitHub](https://github.com/BIC-MNI)
-- **Individual packages**: Refer to their respective repositories
-
-## Links
+## Resources
 
 - [MINC Toolkit Documentation](http://bic-mni.github.io/man-pages)
 - [Conda Build Documentation](https://docs.conda.io/projects/conda-build/)
