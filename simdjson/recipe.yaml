@@ -1,0 +1,31 @@
+context:
+  version: "3.13.0"
+
+package:
+  name: simdjson
+  version: ${{ version }}
+  
+source:
+  url: https://github.com/simdjson/simdjson/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 07a1bb3587aac18fd6a10a83fe4ab09f1100ab39f0cb73baea1317826b9f9e0d
+
+build:
+  script: |
+    mkdir build
+    cd build
+    cmake -D CMAKE_INSTALL_PREFIX=${PREFIX} -D SIMDJSON_DEVELOPER_MODE=OFF -D BUILD_SHARED_LIBS=ON ..
+    cmake --build . --config Release --target install
+
+requirements:
+  host:
+    - ${{ compiler("c") }}
+    - ${{ compiler("cxx") }}
+    - cmake
+    - ninja  # or make, if preferred
+  run:
+    # simdjson is a C++ library, so no runtime deps for the library itself
+
+tests:
+  - script:
+      - test -f $PREFIX/lib/libsimdjson.so || test -f $PREFIX/lib/libsimdjson.dylib
+      - test -f $PREFIX/include/simdjson.h
