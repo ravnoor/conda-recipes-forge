@@ -1,0 +1,22 @@
+context:
+  version: "25.5.31"
+
+package:
+  name: yazi
+  version: ${{ version }}
+  
+source:
+  url: https://github.com/sxyazi/yazi/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 4d005e7c3f32b5574d51ab105597f3da3a4be2f7b5cd1bcb284143ad38253ed4
+
+build:
+  script: cargo install --locked --root ${{ PREFIX }} --path yazi-fm --no-track
+
+requirements:
+  build:
+    - ${{ compiler("rust") }}
+    - ${{ compiler("c") }}
+
+tests:
+  - script:
+      - yazi --help 
