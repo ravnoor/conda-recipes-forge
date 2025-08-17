@@ -10,12 +10,14 @@ source:
   tag: v${{ version }}
 
 build:
+  skip:
+    - osx-arm64
+    - osx-64  # add this to skip all macOS builds
   script: ${{ PYTHON }} -m pip install --use-pep517 --no-build-isolation . -vv
   number: 0
   python:
     entry_points:
-    - nii2dcm = nii2dcm.__main__:cli
-  # noarch: python
+      - nii2dcm = nii2dcm.__main__:cli
 
 requirements:
   host:
@@ -23,7 +25,7 @@ requirements:
   - setuptools
   - pip
   - wheel
-  - dunamai==1.18.0
+  - dunamai
   run:
   - python
   - numpy==1.23.2

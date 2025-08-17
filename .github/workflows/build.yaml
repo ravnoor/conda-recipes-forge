@@ -42,10 +42,13 @@ jobs:
           fetch-depth: 2
 
       - uses: prefix-dev/setup-pixi@v0.8.8
+        env:
+          RUNNER_DEBUG: true
         with:
           pixi-version: v0.48.1
           auth-host: prefix.dev
           auth-token: ${{ secrets.PREFIX_API_KEY }}
+          log-level: vvv
 
       - name: Add .pixi/envs/default/bin to the $PATH
         shell: bash
@@ -54,14 +57,18 @@ jobs:
 
       - name: Build individual packages
         shell: bash
-        run: |
+        timeout-minutes: 45
+        run: |         
+          # Add solver options to prevent hanging
           rattler-build build --continue-on-failure \
             --recipe-dir .  \
             ${{ matrix.build-args }}  \
             --package-format conda:22 \
             --channel conda-forge \
             --channel minc-forge \
-            --channel https://repo.prefix.dev/nrx-forge
+            --channel https://repo.prefix.dev/nrx-forge \
+            --debug \
+            --verbose
 
       - name: Upload package
         shell: bash

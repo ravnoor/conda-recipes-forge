@@ -1,0 +1,10 @@
+[settings]
+channel_priority = "strict"
+channels = ["conda-forge", "nrx-forge", "minc-forge"]
+
+[build]
+package-format = "conda:22"
+
+[mirrors]
+"https://conda.anaconda.org/conda-forge" = ["https://prefix.dev/conda-forge"]
+"https://conda.anaconda.org/nrx-forge" = ["https://repo.prefix.dev/nrx-forge"]
