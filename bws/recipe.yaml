@@ -1,0 +1,23 @@
+context:
+  version: "1.0.0"
+
+package:
+  name: bws
+  version: ${{ version }}
+  
+source:
+  git: https://github.com/bitwarden/sdk-sm
+  # tag: bws-v${{ version }}
+  branch: main
+
+build:
+  script: |
+    cargo install --path crates/bws --root ${{ PREFIX }} --no-track
+
+requirements:
+  build:
+    - ${{ compiler("rust") }}
+
+tests:
+  - script:
+      - bws --help
