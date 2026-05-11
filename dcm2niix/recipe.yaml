@@ -1,11 +1,10 @@
 context:
   name: dcm2niix
-  version: "1.0.20250506"  # Use latest version
+  version: "1.0.20260416"  # Use latest version
 
 package:
   name: ${{ name }}
   version: ${{ version }}
-
 
 source:
   git: https://github.com/rordenlab/dcm2niix.git
@@ -14,44 +13,48 @@ source:
 build:
   number: 0
   script: |
-    mkdir build
-    cd build
+    #!/usr/bin/env bash
+
+    set -e
+
+    mkdir -p build && cd build
     export CFLAGS="$CFLAGS -D_GNU_SOURCE"
     export CXXFLAGS="$CXXFLAGS -D_GNU_SOURCE"
     cmake \
       -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_C_FLAGS="$CFLAGS" \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
       -DCMAKE_INSTALL_PREFIX=$PREFIX \
+      -DUSE_STATIC_RUNTIME:BOOL=OFF \
       -DBATCH_VERSION=ON \
       -DUSE_JPEGLS=ON \
       -DUSE_OPENJPEG=ON \
       -DUSE_JASPER=OFF \
-      -DUSE_TURBOJPEG=ON \
+      -DUSE_TURBOJPEG=OFF \
+      -DUSE_ZSTD=OFF \
       -DZLIB_IMPLEMENTATION=Cloudflare \
-      -DCMAKE_C_FLAGS="$CFLAGS -D_GNU_SOURCE" \
-      -DCMAKE_CXX_FLAGS="$CXXFLAGS -D_GNU_SOURCE" \
       ..
     make -j${CPU_COUNT}
     make install
 
 requirements:
   build:
-    - cmake >= 3.16
+    - cmake >= 3.5
+    - make
     - ${{ compiler("cxx") }}
     - pkg-config
+    - git
+    - if: not win
+      then:
+        - libtool
     - openjpeg  # For JPEG2000 support
-    - charls # For JPEG-LS support
-    - libjpeg-turbo  # For JPEG support
-    - zlib  # For compression support
-  host:
-    - libjpeg-turbo  # For JPEG support
-  run:
-    - libjpeg-turbo  # For JPEG support
+    - charls    # For JPEG-LS support
 
 tests:
   - script:
-    - dcm2niix -h
-    - dcm2niibatch ./batch_config.yml
-    - dcm2niix | grep -i "JP-LS"  # Verify JPEG-LS support
+      - dcm2niix -h
+      - dcm2niibatch ./batch_config.yml
+      - dcm2niix | grep -i "JP-LS"  # Verify JPEG-LS support
     files:
       source:
         - batch_config.yml
